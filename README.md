@@ -1,3 +1,12 @@
+## 依赖第三方库
+
+`requests`,`APScheduler`
+
+```
+pip install requests
+pip install APScheduler
+```
+
 ## 修改配置
 
 > 修改邮箱相关配置,默认使用 qq 邮箱,修改 common/config.py

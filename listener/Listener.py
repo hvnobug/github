@@ -1,5 +1,3 @@
-import time
-import threading
 from abc import abstractmethod
 from apscheduler.schedulers.background import BackgroundScheduler
 import requests
