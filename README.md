@@ -1,3 +1,27 @@
+## 修改配置
+
+> 修改邮箱相关配置,默认使用 qq 邮箱,修改 common/config.py
+```python
+email = {
+    'sender': ['your email', 'your name'],
+    'secure': 'your secure',
+     # qq 邮箱服务器,使用其他邮箱请修改服务器端口
+    'host': 'smtp.qq.com',
+    'receivers': [
+        ['receiver`s email', 'receiver`s name']
+    ],
+    'user_ssl': True,
+    'port': 25,
+    'ssl_port': 465,
+    'charset': 'utf-8'
+}
+```
+
+## 监听仓库
+
+> 修改 run.py 文件监听仓库更新
+
+```python
 import time
 from common import GithubUserRepository, GithubUser
 from listener import RepoUpdateListener
@@ -30,3 +54,5 @@ if __name__ == '__main__':
     main()
     while True:
         time.sleep(1)
+
+```
