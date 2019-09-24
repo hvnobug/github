@@ -18,8 +18,7 @@ class Listener:
         self.cur_update = None
         self.last_update = None
         self.scheduler = BackgroundScheduler()
-        # minutes = 10
-        self.scheduler.add_job(self.listen, 'interval', seconds=5)
+        self.scheduler.add_job(self.listen, 'interval', seconds=self.duration)
 
     @abstractmethod
     def listen(self):
