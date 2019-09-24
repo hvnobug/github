@@ -19,7 +19,7 @@ class Email:
         server.login(self.__sender[0], self.__password)
         msg = MIMEText(text, sub_type, self.__charset)
         msg['From'] = formataddr(self.__sender)
-        msg['Subject'] = Header(title, 'utf-8')
+        msg['Subject'] = Header(title, self.__charset)
         if not receivers:
             receivers = self.__receivers
         assert len(receivers), 'parameter `receivers` is empty'
