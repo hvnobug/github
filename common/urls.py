@@ -145,7 +145,7 @@ class GithubUser(object):
         """
         return format_url('{api_url}/gists/{gist_id}'.format(api_url=self.api_url(), gist_id=gist_id))
 
-    def starred_url(self, owner, repo=''):
+    def starred_url(self, owner='', repo=''):
         """
         用户关注的仓库
         """

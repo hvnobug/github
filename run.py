@@ -1,29 +1,51 @@
 import time
+
+import requests
+
 from common import GithubUserRepository, GithubUser
 from listener import RepoUpdateListener
 
-# 仓库所有者
-user = 'spring-projects'
-# 仓库名称
-repo = 'spring-boot'
+username = 'hvnobug'
 
 # 可以生成 仓库相关 github api
-gur = GithubUserRepository(user, repo)
 # 可以生成 用户相关 github api
-gu = GithubUser(user)
+gu = GithubUser(username)
+
+listeners = []
 
 
 def main():
-    listen_repo_update()
+    start_listen()
 
 
-def listen_repo_update():
+def start_listen():
     """
     监听仓库更新
     """
-    # listener = RepoUpdateListener(user=user,repo=repo, duration=600)
-    listener = RepoUpdateListener(github_repo=gur, duration=600)
-    listener.start()
+    result = requests.get(gu.starred_url()).json()
+    for repository in result:
+        repo = repository['name']
+        user = repository['owner']['login']
+        gur = GithubUserRepository(user, repo)
+        listener = RepoUpdateListener(github_repo=gur, duration=600)
+        listener.start()
+        listeners.append(listener)
+
+
+def pause_listen():
+    """
+    暂停监听
+    """
+    for listener in listeners:
+        listener.pause()
+
+
+def stop_listen():
+    """
+    停止监听
+    """
+    for listener in listeners:
+        listener.shutdown()
 
 
 if __name__ == '__main__':
