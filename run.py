@@ -4,6 +4,7 @@ import requests
 
 from common import GithubUserRepository, GithubUser
 from listener import RepoUpdateListener
+from util import logger
 
 username = 'hvnobug'
 
@@ -24,6 +25,10 @@ def start_listen():
     """
     # 获取用户 starred 仓库列表
     result = requests.get(gu.starred_url()).json()
+    if isinstance(result, dict):
+        message = result['message']
+        logger.error(message)
+        return
     for repository in result:
         repo = repository['name']
         user = repository['owner']['login']

@@ -16,8 +16,8 @@ logger = {
     'version': 1,
     'formatters': {
         'simple': {
-            'format': '%(asctime)s - %(filename)s.%(funcName)s - %(levelname)s - %(message)s',
-        },
+            'format': '%(asctime)s %(levelname)s %(process)d - [%(threadName)s] %(filename)s.%(funcName)s:%(lineno)d : %(message)s',
+        }
         # 其他的 formatter
     },
     'handlers': {
@@ -28,7 +28,7 @@ logger = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': 'logging.log',
+            'filename': 'github.log',
             'level': 'DEBUG',
             'formatter': 'simple'
         },
