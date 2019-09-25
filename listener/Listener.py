@@ -17,7 +17,6 @@ class Listener:
         self.last_update = None
         self.scheduler = BackgroundScheduler()
         self.scheduler.add_job(self.listen, 'interval', seconds=self.duration)
-        self.listen()
 
     @abstractmethod
     def listen(self):
@@ -61,6 +60,7 @@ class RepoUpdateListener(Listener):
             self.__github_repo = github_repo
             self.__user = github_repo.user
             self.__repo = github_repo.repo
+        self.listen()
 
     def listen(self):
         api_url = self.__github_repo.api_url()
