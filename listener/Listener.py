@@ -17,6 +17,7 @@ class Listener:
         self.last_update = None
         self.scheduler = BackgroundScheduler()
         self.scheduler.add_job(self.listen, 'interval', seconds=self.duration)
+        self.listen()
 
     @abstractmethod
     def listen(self):

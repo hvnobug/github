@@ -27,6 +27,7 @@ def start_listen():
         repo = repository['name']
         user = repository['owner']['login']
         gur = GithubUserRepository(user, repo)
+        time.sleep(10)
         listener = RepoUpdateListener(github_repo=gur, duration=600)
         listener.start()
         listeners.append(listener)
