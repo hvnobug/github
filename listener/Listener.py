@@ -66,6 +66,10 @@ class RepoUpdateListener(Listener):
         api_url = self.__github_repo.api_url()
         home_url = self.__github_repo.home_url()
         result = requests.get(api_url).json()
+        message = result.get('message', None)
+        if message:
+            logger.error(message)
+            return
         self.last_update = result['updated_at']
         if not self.cur_update:
             self.cur_update = self.last_update
