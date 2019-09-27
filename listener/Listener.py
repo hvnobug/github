@@ -1,12 +1,9 @@
-from abc import abstractmethod
-from apscheduler.schedulers.background import BackgroundScheduler
 import requests
-
-from common import GithubUserRepository
-from service import email
+from util import email
 from util import logger
-
-logger.name = __name__
+from abc import abstractmethod
+from common import GithubRepositoryUrls
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 class Listener:
@@ -54,9 +51,9 @@ class RepoUpdateListener(Listener):
         if github_repo is None:
             self.__user = kwargs.get('user', None)
             self.__repo = kwargs.get('repo', None)
-            self.__github_repo = GithubUserRepository(self.__user, self.__repo)
+            self.__github_repo = GithubRepositoryUrls(self.__user, self.__repo)
         else:
-            assert isinstance(github_repo, GithubUserRepository), 'github_repo must instance of GithubUserRepository'
+            assert isinstance(github_repo, GithubRepositoryUrls), 'github_repo 必须是 GithubUserRepository 类型'
             self.__github_repo = github_repo
             self.__user = github_repo.user
             self.__repo = github_repo.repo

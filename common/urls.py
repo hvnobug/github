@@ -7,11 +7,11 @@ github_api_host = 'https://api.github.com'
 def format_url(url: str): return format_url(url[:-1]) if url.endswith('/') else url
 
 
-class GithubUserRepository(object):
+class GithubRepositoryUrls(object):
 
     def __init__(self, user: str, repo: str):
-        assert user is not None, 'user can not be null'
-        assert repo is not None, 'repo can not be null'
+        assert user is not None, '参数 user 不能为 None'
+        assert repo is not None, '参数 repo 不能为 None'
         self.__user = user
         self.__repo = repo
 
@@ -104,9 +104,9 @@ class GithubUserRepository(object):
         return format_url('{repo_url}/releases/{id}'.format(repo_url=self.api_url(), id=release_id))
 
 
-class GithubUser(object):
+class GithubUserUrls(object):
     def __init__(self, user: str):
-        assert user is not None, 'user can not be null'
+        assert user is not None, '参数 user 不能为 None'
         self.__user = user
 
     def home_url(self):

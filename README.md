@@ -1,13 +1,20 @@
-## 依赖第三方库
+> Python3.6
 
-`requests`,`APScheduler`
+## 1. 依赖第三方库
+> `zhon`(中文标点符号处理),`colorama`(在控制台、命令行输出彩色文字的模块),`prettytable`(来生成美观的 ASCII 格式的表格),`requests`(常用的 http 请求的模块),`APScheduler`(定时任务框架),`mongoengine`(Mongodb 的对象文档映射器)
 
 ```
+pip install zhon
+pip install colorama
 pip install requests
+pip install prettytable
 pip install APScheduler
+pip install mongoengine
 ```
 
-## 修改配置
+## 2. 修改配置
+
+### 2.1 修改邮箱配置
 
 > 修改邮箱相关配置,默认使用 qq 邮箱,修改 common/config.py
 ```python
@@ -26,13 +33,24 @@ email = {
 }
 ```
 
-## 监听仓库
+### 2.2 修改 mongo 配置
+```python
+mongo = {
+    'host': '127.0.0.1',
+    'port': 27017,
+    'database': 'github',
+    'username': None,
+    'password': None
+}
+```
+
+## 3. 监听仓库
 
 > 修改 run.py 文件监听仓库更新
 
 ```python
 import time
-from common import GithubUserRepository, GithubUser
+from common import GithubRepositoryUrls, GithubUserUrls
 from listener import RepoUpdateListener
 
 # 仓库所有者
@@ -41,21 +59,17 @@ user = 'spring-projects'
 repo = 'spring-boot'
 
 # 可以生成 仓库相关 github api
-gur = GithubUserRepository(user, repo)
+# gru = GithubRepositoryUrls(user, repo)
 # 可以生成 用户相关 github api
-gu = GithubUser(user)
+# guu = GithubUserUrls(user)
 
 
 def main():
-    listen_repo_update()
-
-
-def listen_repo_update():
     """
     监听仓库更新
     """
-    # listener = RepoUpdateListener(user=user,repo=repo, duration=600)
-    listener = RepoUpdateListener(github_repo=gur, duration=600)
+    listener = RepoUpdateListener(user=user,repo=repo, duration=600)
+    # listener = RepoUpdateListener(github_repo=gru, duration=600)
     listener.start()
 
 

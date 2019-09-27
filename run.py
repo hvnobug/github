@@ -2,14 +2,14 @@ import time
 
 import requests
 
-from common import GithubUserRepository, GithubUser
+from common import GithubRepositoryUrls, GithubUserUrls
 from listener import RepoUpdateListener
 from util import logger
 
 username = 'hvnobug'
 
 # 可以生成 用户相关 github api
-gu = GithubUser(username)
+gu = GithubUserUrls(username)
 
 # 监听器列表
 listeners = []
@@ -33,7 +33,7 @@ def start_listen():
         repo = repository['name']
         user = repository['owner']['login']
         # 可以生成 仓库相关 github api
-        gur = GithubUserRepository(user, repo)
+        gur = GithubRepositoryUrls(user, repo)
         time.sleep(10)
         # 监听仓库更新并发送邮件通知
         listener = RepoUpdateListener(github_repo=gur, duration=600)
