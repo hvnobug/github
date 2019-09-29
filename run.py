@@ -1,7 +1,5 @@
 import time
-
 import requests
-
 from common import GithubRepositoryUrls, GithubUserUrls
 from listener import RepoUpdateListener
 from util import logger

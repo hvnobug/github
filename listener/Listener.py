@@ -1,5 +1,9 @@
+from datetime import datetime
+
 import requests
-from util import email
+
+from entity import GithubRepository
+from util import email, format_ufc_datetime
 from util import logger
 from abc import abstractmethod
 from common import GithubRepositoryUrls
@@ -10,8 +14,6 @@ class Listener:
     def __init__(self, **kwargs):
         super().__init__()
         self.duration = kwargs.get('duration', 600)
-        self.cur_update = None
-        self.last_update = None
         self.scheduler = BackgroundScheduler()
         self.scheduler.add_job(self.listen, 'interval', seconds=self.duration)
 
@@ -60,6 +62,7 @@ class RepoUpdateListener(Listener):
         self.listen()
 
     def listen(self):
+
         api_url = self.__github_repo.api_url()
         home_url = self.__github_repo.home_url()
         result = requests.get(api_url).json()
@@ -67,16 +70,29 @@ class RepoUpdateListener(Listener):
         if message:
             logger.error(message)
             return
-        self.last_update = result['updated_at']
-        if not self.cur_update:
-            self.cur_update = self.last_update
+        gr_id = result['id']
+        created_at = format_ufc_datetime(result['created_at'])
+        updated_at = format_ufc_datetime(result['updated_at'])
         full_name = result['full_name']
-        if self.last_update < self.cur_update:
-            self.last_update = self.cur_update
-            logger.info('{repo_name} 已更新'.format(repo_name=full_name))
-            self.notify(full_name, home_url)
-        else:
-            logger.info('{repo_name} 未更新'.format(repo_name=full_name))
+
+        def save_user_repo(repo):
+            gr = GithubRepository(owner=repo['owner']['login'], name=repo['name'], stars=repo['stargazers_count'],
+                                  forks=repo['forks'], private=repo['private'], watchers=repo['watchers'],
+                                  language=repo['language'], full_name=full_name,
+                                  open_issues=repo['open_issues'], fork=repo['fork'], created_at=created_at,
+                                  updated_at=updated_at, id=gr_id, node_id=repo['node_id'])
+            gr.create_time = datetime.now()
+            gr.save()
+
+        cur_gr = GithubRepository.objects(id=gr_id).first()
+        if cur_gr:
+            cur_updated_at = cur_gr.updated_at
+            if updated_at > cur_updated_at:
+                logger.info('{repo_name} 已更新'.format(repo_name=full_name))
+                self.notify(full_name, home_url)
+            else:
+                logger.info('{repo_name} 未更新'.format(repo_name=full_name))
+        save_user_repo(result)
 
     def start(self):
         logger.info('正在监听仓库 - {user}/{repo} 更新'.format(user=self.__user, repo=self.__repo))

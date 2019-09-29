@@ -12,7 +12,7 @@ from util.bean import get_object_attrs, object2dict
 
 def test_mongo_orm():
     def save_user_repo():
-        json = requests.get(GithubUserUrls('spring-project').starred_url()).json()
+        json = requests.get(GithubUserUrls('hvnobug').starred_url()).json()
         for item in json:
             node_id = item['node_id']
             name = item['name']
@@ -32,5 +32,9 @@ def test_mongo_orm():
                                   created_at=created_at, updated_at=updated_at, id=item['id'], node_id=node_id)
             gr.create_time = datetime.now()
             gr.save()
+
     save_user_repo()
     print_table(GithubRepository.objects.all())
+
+
+test_mongo_orm()
