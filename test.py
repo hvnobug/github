@@ -59,6 +59,3 @@ def test_send_email():
         </h3>
         """
     email.send_emil('Github仓库更新通知', html, 'html')
-
-
-test_send_email()

@@ -26,6 +26,7 @@ email = {
     'receivers': [
         ['receiver`s email', 'receiver`s name']
     ],
+    # 是否使用 ssl
     'user_ssl': True,
     'port': 25,
     'ssl_port': 465,
@@ -38,9 +39,15 @@ email = {
 mongo = {
     'host': '127.0.0.1',
     'port': 27017,
-    'database': 'github',
-    'username': None,
-    'password': None
+    'username': 'username',
+    'password': 'password',
+    'database': 'test',
+    # 认证数据库
+    'auth_database': 'admin',
+    # 认证机制 
+    'auth_mechanism': 'MONGODB-CR',
+    # 是否开启认证
+    'auth': True
 }
 ```
 
