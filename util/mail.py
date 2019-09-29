@@ -31,9 +31,9 @@ class Email:
     def __send_email(sender, receiver, msg, title, server):
         try:
             server.sendmail(sender, receiver, msg)
-            logger.info('发送邮件 - {} 给 {} 成功'.format(receiver, title))
+            logger.info('发送邮件 - {} 给 {} 成功'.format(title, receiver))
         except smtplib.SMTPException:
-            logger.error('发送邮件 - {} 给 {} 失败'.format(receiver, title))
+            logger.error('发送邮件 - {} 给 {} 失败'.format(title, receiver))
 
 
 email = Email()

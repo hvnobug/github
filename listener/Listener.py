@@ -41,9 +41,13 @@ class RepoUpdateListener(Listener):
 
     def notify(self, *args, **kwargs):
         html = """
-        <center><h2>Github仓库更新通知</h2></center>
-        <p>您关注的仓库<span style="color=red">{repo_name}</span>已经更新</p>
-        <p>请点击<a href="{repo_url}">链接</a>查看</p>
+        <center>
+            <h1>Github仓库更新通知</h1>
+        </center>
+        <h3>
+            您关注的仓库
+            <a style="color:#DC143C;margin:0 10px;" href="{repo_url}">{repo_name}</a>已经更新
+        </h3>
         """.format(repo_name=args[0], repo_url=args[1])
         email.send_emil('Github仓库更新通知', html, 'html')
 

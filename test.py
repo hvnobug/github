@@ -6,7 +6,7 @@ import requests
 
 from common import GithubRepositoryUrls, GithubUserUrls
 from entity import GithubUser, GithubRepository
-from util import print_table, ufc_datetime_format, format_ufc_datetime
+from util import print_table, ufc_datetime_format, format_ufc_datetime, email
 from util.bean import get_object_attrs, object2dict
 from util.mongo import mongo_collection
 
@@ -48,4 +48,17 @@ def test_mongo_orm():
     print_table(GithubRepository.objects.all())
 
 
-test_mongo_collect2()
+def test_send_email():
+    html = """
+        <center>
+            <h1>Github仓库更新通知</h1>
+        </center>
+        <h3>
+            您关注的仓库
+            <a style="color:#DC143C;margin:0 10px;" href="https://github.com/asciinema/asciinema">asciinema/asciinema</a>已经更新
+        </h3>
+        """
+    email.send_emil('Github仓库更新通知', html, 'html')
+
+
+test_send_email()
