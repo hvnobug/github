@@ -8,6 +8,16 @@ from common import GithubRepositoryUrls, GithubUserUrls
 from entity import GithubUser, GithubRepository
 from util import print_table, ufc_datetime_format, format_ufc_datetime
 from util.bean import get_object_attrs, object2dict
+from util.mongo import mongo_collection
+
+
+def test_mongo_collect1():
+    with mongo_collection('github_repository') as github_repository:
+        print_table(github_repository.find())
+
+
+def test_mongo_collect2():
+    print_table(GithubRepository.objects())
 
 
 def test_mongo_orm():
@@ -27,9 +37,10 @@ def test_mongo_orm():
             updated_at = format_ufc_datetime(item['updated_at'])
             stars = item['stargazers_count']
             open_issues = item['open_issues']
-            gr = GithubRepository(owner=owner, name=name, stars=stars, forks=forks, private=private, watchers=watchers,
-                                  language=language, full_name=full_name, open_issues=open_issues, fork=fork,
-                                  created_at=created_at, updated_at=updated_at, id=item['id'], node_id=node_id)
+            gr = GithubRepository(
+                owner=owner, name=name, stars=stars, forks=forks, private=private, watchers=watchers,
+                language=language, full_name=full_name, open_issues=open_issues, fork=fork,
+                created_at=created_at, updated_at=updated_at, id=item['id'], node_id=node_id)
             gr.create_time = datetime.now()
             gr.save()
 
@@ -37,4 +48,4 @@ def test_mongo_orm():
     print_table(GithubRepository.objects.all())
 
 
-test_mongo_orm()
+test_mongo_collect2()

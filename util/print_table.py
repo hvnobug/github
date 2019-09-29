@@ -1,10 +1,29 @@
 from collections.abc import Iterable
 from datetime import datetime
-from util import color, simple_datetime_format
+
+from pymongo.cursor import Cursor as MongoCursor
+from util import simple_datetime_format
 from math import ceil
 
 from util import logger, str_zh_count
 from prettytable import PrettyTable
+
+
+def print_table(params):
+    if not params:
+        logger.warning('参数 param 不合法')
+        return
+    if not isinstance(params, Iterable):
+        logger.warning('param 为不可迭代对象')
+        return
+    if isinstance(params, MongoCursor):
+        params = [param for param in params]
+    attrs = __get_all_attrs(params)
+    values = __get_all_values(attrs, params)
+    table = PrettyTable(attrs)
+    for item in values:
+        table.add_row(item)
+    print(table)
 
 
 def __get_all_attrs(params):
@@ -14,8 +33,7 @@ def __get_all_attrs(params):
     return list(set(attrs))
 
 
-def __get_all_values(params):
-    attrs = __get_all_attrs(params)
+def __get_all_values(attrs, params):
     result = []
     for param in params:
         values = []
@@ -35,21 +53,6 @@ def __value2string(param):
     if isinstance(param, datetime):
         return simple_datetime_format(param)
     return str(param)
-
-
-def print_table(params):
-    if not params:
-        logger.warning('参数 param 不合法')
-        return
-    if not isinstance(params, Iterable):
-        logger.warning('param 为不可迭代对象')
-        return
-    attrs = __get_all_attrs(params)
-    values = __get_all_values(params)
-    table = PrettyTable(attrs)
-    for item in values:
-        table.add_row(item)
-    print(table)
 
 
 def __get_attrs(param):

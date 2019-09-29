@@ -1,17 +1,15 @@
 import pymongo
-
 from common import mongo_config as config
+from util import mongo_url
 
 
 class MongoDB(object):
     __host = None
 
     def __init__(self, collection=None):
-        self.__host = config['host']
-        self.__port = config['port']
-        self.__db = config['database']
+
         self.__collection = collection
-        self.__client = pymongo.MongoClient(host=self.__host, port=self.__port)
+        self.__client = pymongo.MongoClient(mongo_url)
 
     def get_database(self, database=None):
         """
@@ -19,7 +17,7 @@ class MongoDB(object):
         :return:  pymongo.database.Database
         """
         if not database:
-            database = self.__db
+            database = db = config['database']
         return self.__client[database]
 
     def get_collection(self, collection=None, database=None):
